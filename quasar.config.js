@@ -10,6 +10,7 @@
 
 
 const { configure } = require('quasar/wrappers');
+const path = require('node:path');
 
 
 module.exports = configure(function (/* ctx */) {
@@ -79,6 +80,15 @@ module.exports = configure(function (/* ctx */) {
       // extendViteConf (viteConf) {},
       // viteVuePluginOptions: {},
 
+      extendViteConf (cfg) {
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias, // This adds the existing alias
+    
+          // Add your own alias like this
+          '@': path.resolve(__dirname, './src'),
+        }
+      },
+
       
       vitePlugins: [
         [ 'unplugin-vue-router/vite', 
@@ -97,7 +107,9 @@ module.exports = configure(function (/* ctx */) {
         [
           'vite-plugin-vue-layouts'
         ]
-      ]
+      ],
+
+
     },
 
     // Full list of options: https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#devServer
