@@ -12,8 +12,20 @@
           color="primary"
         ></q-btn>
         <div class="flex justify-between">
-          <q-btn label="비밀번호 찾기" color="secondary" dense flat></q-btn>
-          <q-btn label="이메일 가입하기" color="secondary" dense flat></q-btn>
+          <q-btn
+            label="비밀번호 찾기"
+            color="secondary"
+            dense
+            flat
+            @click="$emit('ChangeView', 'FindPasswordForm')"
+          ></q-btn>
+          <q-btn
+            label="이메일 가입하기"
+            color="secondary"
+            dense
+            flat
+            @click="$emit('ChangeView', 'SignUpForm')"
+          ></q-btn>
         </div>
       </div>
       <q-separator />
