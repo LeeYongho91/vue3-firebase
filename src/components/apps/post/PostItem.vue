@@ -20,9 +20,11 @@
       <div class="row items-center">
         <div class="col-3">
           <div class="flex flex-center">
-            <q-icon name="sym_o_visibility" color="grey" size="xs" />
-            <span class="text-grey q-ml-xs text-body2">{{ readCount }}</span>
-            <q-tooltip :offset="[0, 4]">조회수</q-tooltip>
+            <PostIcon
+              name="sym_o_visibility"
+              :label="readCount"
+              tooltip="조회수"
+            />
           </div>
         </div>
         <div class="col-3">
@@ -58,7 +60,7 @@
 </template>
 
 <script setup>
-import { comment } from 'postcss';
+import PostIcon from '@/components/apps/post/PostIcon.vue';
 
 defineProps({
   id: {
@@ -71,16 +73,16 @@ defineProps({
     type: String,
   },
   readCount: {
-    type: String,
+    type: Number,
   },
   commentCount: {
-    type: String,
+    type: Number,
   },
   likeCount: {
-    type: String,
+    type: Number,
   },
   bookmarkCount: {
-    type: String,
+    type: Number,
   },
   category: {
     type: String,

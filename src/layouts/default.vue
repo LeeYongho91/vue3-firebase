@@ -26,6 +26,7 @@
       </q-toolbar>
     </q-header>
     <q-page-container :style="pageContainerStyles">
+      {{ authDialog }}
       <router-view />
     </q-page-container>
     <AuthDialog v-model="authDialog" />

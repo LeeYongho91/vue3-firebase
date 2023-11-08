@@ -51,6 +51,13 @@
         </q-btn>
       </div>
       <div class="q-mt-md text-h5 text-weight-bold">제목입니다</div>
+      <q-separator class="q-my-lg" />
+      <div>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis ut
+        suscipit dicta debitis ipsa, consequuntur dolore laborum pariatur!
+        Praesentium dignissimos facere quidem maxime consequuntur, veniam
+        expedita vero quo odit animi. <br />
+      </div>
     </q-card>
   </q-page>
 </template>
@@ -58,3 +65,7 @@
 <script setup></script>
 
 <style lang="scss" scoped></style>
+<route lang="yaml">
+meta:
+  width: 800px
+</route>
