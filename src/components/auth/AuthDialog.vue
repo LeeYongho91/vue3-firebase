@@ -1,7 +1,7 @@
 <template>
   <q-dialog
-    :model-value="modelValue"
-    @update:model-value="val => $emit('update:modelValue', val)"
+    :modelValue="modelValue"
+    @update:modelValue="val => $emit('update:modelValue', val)"
     transition-show="none"
     transition-hide="none"
     @hide="changeViewMode('SignInForm')"
