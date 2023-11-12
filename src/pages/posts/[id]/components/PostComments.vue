@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <q-card
+    <BaseCard
       v-if="!isActive"
       @click="toggleActive"
       class="cursor-pointer"
@@ -28,7 +28,7 @@
         </q-avatar>
         <div class="text-grey-6 q-ml-md">댓글을 작성해보세요.</div>
       </q-card-section>
-    </q-card>
+    </BaseCard>
 
     <CommentList :items="comments" />
   </div>
@@ -37,6 +37,7 @@
 <script setup>
 import { ref } from 'vue';
 import CommentList from '@/components/apps/comment/CommentList.vue';
+import BaseCard from '@/components/base/BaseCard.vue';
 const isActive = ref(false);
 const toggleActive = () => (isActive.value = !isActive.value);
 

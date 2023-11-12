@@ -6,16 +6,26 @@
         <PostHeader />
         <PostList :items="posts" />
       </section>
-      <PostRightBar class="col-3" />
+      <PostRightBar class="col-3" @open-write-dialog="openWriteDialog" />
     </div>
+    <PostWriteDialog
+      v-model="postDialog"
+      @click="test12"
+      test="test2"
+      name="test12"
+    />
+    <test @click="test12" test="test2" name="test12" class="test33" />
   </q-page>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import PostList from '@/components/apps/post/PostList.vue';
 import PostHeader from '@/pages/components/PostHeader.vue';
 import PostLeftBar from '@/pages/components/PostLeftBar.vue';
 import PostRightBar from '@/pages/components/PostRightBar.vue';
+import PostWriteDialog from '@/components/apps/post/PostWriteDialog.vue';
+import test from '@/components/apps/post/test.vue';
 
 const posts = Array.from(Array(20), (_, index) => ({
   id: index,
@@ -30,6 +40,19 @@ const posts = Array.from(Array(20), (_, index) => ({
   uid: 'uid',
   category: '카테고리',
 }));
+
+const postDialog = ref(false);
+const openWriteDialog = () => {
+  postDialog.value = true;
+};
+
+const test12 = () => {
+  console.log('test1212');
+};
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.test33 {
+  border: 1px solid red;
+}
+</style>

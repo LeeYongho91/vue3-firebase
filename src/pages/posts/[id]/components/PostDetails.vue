@@ -1,5 +1,5 @@
 <template>
-  <q-card class="q-pa-lg">
+  <BaseCard class="q-pa-lg">
     <div class="flex q-mb-md">
       <q-btn
         icon="sym_o_arrow_back"
@@ -79,11 +79,12 @@
       Praesentium dignissimos facere quidem maxime consequuntur, veniam expedita
       vero quo odit animi. <br />
     </div>
-  </q-card>
+  </BaseCard>
 </template>
 
 <script setup>
 import PostIcon from '@/components/apps/post/PostIcon.vue';
+import BaseCard from '@/components/base/BaseCard.vue';
 </script>
 
 <style lang="scss" scoped></style>
