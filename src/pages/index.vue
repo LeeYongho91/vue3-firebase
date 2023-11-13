@@ -8,13 +8,7 @@
       </section>
       <PostRightBar class="col-3" @open-write-dialog="openWriteDialog" />
     </div>
-    <PostWriteDialog
-      v-model="postDialog"
-      @click="test12"
-      test="test2"
-      name="test12"
-    />
-    <test @click="test12" test="test2" name="test12" class="test33" />
+    <PostWriteDialog v-model="postDialog" />
   </q-page>
 </template>
 
@@ -28,7 +22,7 @@ import PostWriteDialog from '@/components/apps/post/PostWriteDialog.vue';
 import test from '@/components/apps/post/test.vue';
 
 const posts = Array.from(Array(20), (_, index) => ({
-  id: index,
+  id: 'A' + index,
   title: 'Vue3 Firebase 강의' + index,
   content:
     'Lorem ipsum dolor sit amet, consectetur adipisicing elit.pti. Lorem ipsum dolor sit amet, consectetur adipisicing elit.pti.Lorem ipsum dolor sit amet, consectetur adipisicing elit.pti.',

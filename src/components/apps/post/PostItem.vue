@@ -60,7 +60,7 @@ import PostIcon from '@/components/apps/post/PostIcon.vue';
 
 defineProps({
   id: {
-    type: Number,
+    type: String,
   },
   title: {
     type: String,
