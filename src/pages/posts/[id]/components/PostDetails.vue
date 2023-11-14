@@ -39,7 +39,11 @@
       <q-btn icon="more_horiz" round flat>
         <q-menu>
           <q-list style="min-width: 100px">
-            <q-item clickable v-close-popup>
+            <q-item
+              clickable
+              v-close-popup
+              :to="`/posts/${$route.params.id}/edit`"
+            >
               <q-item-section>수정하기</q-item-section>
             </q-item>
             <q-item clickable v-close-popup>
@@ -56,6 +60,7 @@
       <PostIcon name="sym_o_favorite" :label="3" tooltip="좋아요" />
       <PostIcon name="sym_o_bookmark" :label="4" tooltip="북마크" />
     </div>
+
     <q-separator class="q-my-lg" />
     <div>
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis ut
