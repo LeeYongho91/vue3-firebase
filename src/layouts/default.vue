@@ -17,22 +17,23 @@
         <q-btn stretch flat label="유튜브" href="https://google.com" />
         <q-separator class="q-my-md q-mr-md" vertical />
         <q-btn
+          v-if="!authStore.isAuthenticated"
           color="primary"
           unelevated
           rounded
           label="로그인 / 회원가입"
           @click="openAuthDialog"
         ></q-btn>
-        <q-btn round flat>
+        <q-btn v-if="authStore.isAuthenticated" round flat>
           <q-avatar>
-            <img src="https://cdn.quasar.dev/img/avatar.png" />
+            <img :src="authStore.user.photoURL" />
           </q-avatar>
           <q-menu>
             <q-list style="min-width: 100px">
               <q-item clickable v-close-popup to="/mypage/profile">
                 <q-item-section>프로필</q-item-section>
               </q-item>
-              <q-item clickable v-close-popup>
+              <q-item clickable v-close-popup @click="handleLogout">
                 <q-item-section>로그아웃</q-item-section>
               </q-item>
             </q-list>
@@ -51,8 +52,12 @@
 import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import AuthDialog from '@/components/auth/AuthDialog.vue';
+import { useAuthStore } from '@/stores/auth';
+import { logout } from '@/services/auth';
 
 const route = useRoute();
+
+const authStore = useAuthStore();
 
 const pageContainerStyles = computed(() => ({
   maxWidth: route.meta?.width || '1080px',
@@ -62,4 +67,7 @@ const pageContainerStyles = computed(() => ({
 const authDialog = ref(false);
 
 const openAuthDialog = () => (authDialog.value = true);
+const handleLogout = async () => {
+  await logout();
+};
 </script>
