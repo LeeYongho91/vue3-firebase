@@ -22,7 +22,15 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
 defineEmits(['ChangeView']);
+
+const form = ref({
+  nickname: '',
+  email: '',
+  password: '',
+});
 </script>
 
 <style lang="scss" scoped></style>
