@@ -10,6 +10,7 @@
             짐코딩 클럽
           </q-toolbar-title>
         </q-btn>
+        {{ authStore.user }}
         <q-space></q-space>
         <q-btn stretch flat label="Home" to="/home" />
         <q-btn stretch flat label="수강하기" href="https://google.com" />
@@ -26,7 +27,12 @@
         ></q-btn>
         <q-btn v-if="authStore.isAuthenticated" round flat>
           <q-avatar>
-            <img :src="authStore.user.photoURL" />
+            <img
+              :src="
+                authStore.user.photoURL ||
+                generateDefaultPhotoURL(authStore.user.uid)
+              "
+            />
           </q-avatar>
           <q-menu>
             <q-list style="min-width: 100px">
@@ -53,7 +59,7 @@ import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import AuthDialog from '@/components/auth/AuthDialog.vue';
 import { useAuthStore } from '@/stores/auth';
-import { logout } from '@/services/auth';
+import { logout, generateDefaultPhotoURL } from '@/services/auth';
 
 const route = useRoute();
 

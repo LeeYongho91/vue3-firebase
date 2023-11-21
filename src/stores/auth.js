@@ -7,6 +7,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   const setUser = userData => {
     if(userData) {
+      console.log(userData);
       user.value = {
         uid: userData.uid,
         photoURL: userData.photoURL,

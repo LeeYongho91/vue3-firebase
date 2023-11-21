@@ -26,6 +26,7 @@ export { auth };
 export default boot(async () => {
   const authStore = useAuthStore();
   onAuthStateChanged(auth, user => {
+    console.log(user);
     authStore.setUser(user);
   })
 })
