@@ -10,7 +10,6 @@
             짐코딩 클럽
           </q-toolbar-title>
         </q-btn>
-        {{ authStore.user }}
         <q-space></q-space>
         <q-btn stretch flat label="Home" to="/home" />
         <q-btn stretch flat label="수강하기" href="https://google.com" />

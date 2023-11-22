@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import { auth } from '@/boot/firebase';
 
 const DEFAULT_PHOTO_URL = 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed='
@@ -6,7 +6,8 @@ const DEFAULT_PHOTO_URL = 'https://api.dicebear.com/7.x/adventurer-neutral/svg?s
 // 로그인 (구글)
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
-  const result = await signInWithPopup(auth, provider);
+  const { user } = await signInWithPopup(auth, provider);
+  return user;
 }
 
 export async function logout() {
@@ -24,4 +25,9 @@ export async function signUpWithEmail({email, password, nickname}) {
 
 export function generateDefaultPhotoURL(uid) {
   return `${DEFAULT_PHOTO_URL}${uid}`;
+}
+
+export async function signInWithEmail({email, password}) {
+  const { user } = await signInWithEmailAndPassword(auth, email, password);
+  return user;
 }

@@ -42,9 +42,12 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useQuasar } from 'quasar';
 import { signUpWithEmail } from '@/services';
 
-defineEmits(['ChangeView']);
+const emit = defineEmits(['ChangeView', 'closeDialog']);
+
+const $q = useQuasar();
 
 const form = ref({
   nickname: '',
@@ -54,7 +57,8 @@ const form = ref({
 
 const handleSubmit = async () => {
   await signUpWithEmail(form.value);
-  alert('가입완료!');
+  $q.notify('가입을 환영합니다 :)');
+  emit('closeDialog');
 };
 </script>
 
