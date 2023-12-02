@@ -1,4 +1,4 @@
-import { GoogleAuthProvider, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, updateEmail, updatePassword, updateProfile } from "firebase/auth";
+import { GoogleAuthProvider, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signInWithPopup, signOut, verifyBeforeUpdateEmail, updateEmail, updatePassword, updateProfile } from "firebase/auth";
 import { auth } from '@/boot/firebase';
 
 const DEFAULT_PHOTO_URL = 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed='
@@ -51,5 +51,5 @@ export async function updateUserProfile(displayName) {
 }
 
 export async function updateUserEmail(email) {
-  await updateEmail(auth.currentUser, email)
+  await updateEmail(auth.currentUser, email);
 }
