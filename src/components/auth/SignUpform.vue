@@ -7,12 +7,16 @@
         placeholder="닉네임"
         outlined
         dense
+        hide-bottom-space
+        :rules="[validateRequired, validateEmail]"
       ></q-input>
       <q-input
         v-model="form.email"
         placeholder="이메일"
         outlined
         dense
+        hide-bottom-space
+        :rules="[validateRequired]"
       ></q-input>
       <q-input
         v-model="form.password"
@@ -20,6 +24,20 @@
         outlined
         dense
         type="password"
+        hide-bottom-space
+        :rules="[validateRequired, validatePassword]"
+      ></q-input>
+      <q-input
+        v-model="passwordConfirm"
+        placeholder="비밀번호 확인"
+        outlined
+        dense
+        type="password"
+        hide-bottom-space
+        :rules="[
+          validateRequired,
+          val => validatePasswordConfirm(form.password, val),
+        ]"
       ></q-input>
       <q-btn
         type="submit"
@@ -44,11 +62,18 @@
 import { ref } from 'vue';
 import { useQuasar } from 'quasar';
 import { signUpWithEmail } from '@/services';
+import {
+  validateRequired,
+  validateEmail,
+  validatePassword,
+  validatePasswordConfirm,
+} from '@/utils/validate-rules';
 
 const emit = defineEmits(['ChangeView', 'closeDialog']);
 
 const $q = useQuasar();
 
+const passwordConfirm = ref('');
 const form = ref({
   nickname: '',
   email: '',
