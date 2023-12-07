@@ -8,7 +8,7 @@
         outlined
         dense
         hide-bottom-space
-        :rules="[validateRequired, validateEmail]"
+        :rules="[validateRequired]"
       ></q-input>
       <q-input
         v-model="form.email"
@@ -16,7 +16,7 @@
         outlined
         dense
         hide-bottom-space
-        :rules="[validateRequired]"
+        :rules="[validateRequired, validateEmail]"
       ></q-input>
       <q-input
         v-model="form.password"
@@ -45,6 +45,7 @@
         label="가입하기"
         class="full-width"
         unelevated
+        :loading="isLoading"
       ></q-btn>
       <q-separator />
       <q-btn
@@ -68,10 +69,27 @@ import {
   validatePassword,
   validatePasswordConfirm,
 } from '@/utils/validate-rules';
+import { useAsyncState } from '@vueuse/core';
 
 const emit = defineEmits(['ChangeView', 'closeDialog']);
 
 const $q = useQuasar();
+
+const { isLoading, execute } = useAsyncState(signUpWithEmail, null, {
+  immediate: false,
+  throwError: false,
+  onSuccess: () => {
+    $q.notify('가입을 환영합니다 :)');
+    $q.notify('이메일에서 인증 링크를 확인해주세요.');
+    emit('closeDialog');
+  },
+  onError: err => {
+    $q.notify({
+      type: 'negative',
+      message: getErrorMessage(err.code),
+    });
+  },
+});
 
 const passwordConfirm = ref('');
 const form = ref({
@@ -80,11 +98,13 @@ const form = ref({
   password: '',
 });
 
-const handleSubmit = async () => {
-  await signUpWithEmail(form.value);
-  $q.notify('가입을 환영합니다 :)');
-  emit('closeDialog');
-};
+const handleSubmit = () => execute(1000, form.value);
+
+// const handleSubmit = async () => {
+//   await signUpWithEmail(form.value);
+//   $q.notify('가입을 환영합니다 :)');
+//   emit('closeDialog');
+// };
 </script>
 
 <style lang="scss" scoped></style>
