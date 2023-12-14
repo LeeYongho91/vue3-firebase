@@ -109,6 +109,8 @@ const handleSubmitEmail = () => executeEmail(1000, email.value);
 //   $q.notify('이메일 수정 완료!');
 // };
 
+console.log(`test`);
+
 watchEffect(() => {
   displayName.value = authStore.user?.displayName;
   email.value = authStore.user?.email;
