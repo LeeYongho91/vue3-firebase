@@ -1,11 +1,19 @@
 <template>
-  <editor-content :editor="editor" />
+  <q-card class="tiptap" bordered flat>
+    <TiptabEditorMenu :editor="editor" />
+    <q-separator />
+    <editor-content class="editor__content" :editor="editor" />
+  </q-card>
 </template>
 
 <script setup>
 import { useEditor, EditorContent } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import { watch } from 'vue';
+import Placeholder from '@tiptap/extension-placeholder';
+import TiptabEditorMenu from 'components/tiptap/TiptabEditorMenu.vue';
+import Link from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
 
 const props = defineProps({
   modelValue: {
@@ -17,8 +25,15 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const editor = useEditor({
-  content: '<p>I’m running Tiptap with Vue.js. 🎉</p>',
-  extensions: [StarterKit],
+  content: '',
+  extensions: [
+    StarterKit,
+    Placeholder.configure({
+      placeholder: '마크다운을 이용해서 편리하게 글을 작성하세요.',
+    }),
+    Link,
+    Image,
+  ],
   onUpdate: () => {
     emit('update:modelValue', editor.value.getHTML());
   },
@@ -35,3 +50,13 @@ watch(
   },
 );
 </script>
+<style lang="scss" src="src/css/tiptap.scss"></style>
+<style lang="scss">
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+</style>

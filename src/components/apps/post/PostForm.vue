@@ -1,13 +1,21 @@
 <template>
-  <q-form>
+  <q-form @submit.prevent="handleSubmit">
     <q-card-section class="q-gutter-y-sm">
-      <q-input v-model="titleModel" outlined placeholder="제목" />
+      <q-input
+        v-model="titleModel"
+        outlined
+        placeholder="제목"
+        hide-bottom-space
+        :rules="[validateRequired]"
+      />
       <q-select
         outlined
         v-model="categoryModel"
         :options="categories"
         emit-value
         map-options
+        hide-bottom-space
+        :rules="[validateRequired]"
       >
         <template v-if="!categoryModel" #selected>
           <span class="text-grey-7">카테고리를 선택하세요.</span>
@@ -29,7 +37,12 @@
     <q-card-actions align="right">
       <slot name="actions">
         <q-btn flat label="취소하기" v-close-popup />
-        <q-btn flat label="저장하기" color="primary" v-close-popup
+        <q-btn
+          type="submit"
+          flat
+          label="저장하기"
+          color="primary"
+          :loading="isLoading"
       /></slot>
     </q-card-actions>
   </q-form>
@@ -37,8 +50,10 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useQuasar } from 'quasar';
 import { getCategories } from '@/services/category';
 import TiptapEditor from '@/components/tiptap/TiptapEditor.vue';
+import { validateRequired } from '@/utils/validate-rules';
 
 const props = defineProps({
   title: {
@@ -54,6 +69,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  isLoading: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits([
@@ -61,7 +80,10 @@ const emit = defineEmits([
   'update:category',
   'update:content',
   'update:tags',
+  'submit',
 ]);
+
+const $q = useQuasar();
 
 const titleModel = computed({
   get: () => props.title,
@@ -81,6 +103,15 @@ const tagField = ref('');
 const removeTag = () => {};
 
 const categories = getCategories();
+
+const handleSubmit = () => {
+  if (!contentModel.value) {
+    $q.notify('내용을 작성하세요.');
+    return;
+  }
+
+  emit('submit');
+};
 </script>
 
 <style lang="scss" scoped></style>

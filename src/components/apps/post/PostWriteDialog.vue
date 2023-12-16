@@ -1,6 +1,12 @@
 <template>
-  <q-dialog persistent v-bind="$attrs" @hide="onHide">
-    <q-card :style="{ width: '600px' }">
+  <q-dialog
+    persistent
+    v-bind="$attrs"
+    @hide="onHide"
+    transition-hide="none"
+    transition-show="none"
+  >
+    <q-card :style="{ minWidth: '600px' }">
       <q-toolbar>
         <q-toolbar-title>글쓰기</q-toolbar-title>
         <q-btn v-close-popup flat round dense icon="close"></q-btn>
@@ -10,6 +16,13 @@
         v-model:title="form.title"
         v-model:category="form.category"
         v-model:content="form.content"
+        @submit="
+          execute(1000, {
+            ...form,
+            uid: authStore.uid,
+          })
+        "
+        :isLoading="isLoading"
       />
     </q-card>
   </q-dialog>
@@ -25,19 +38,28 @@ const getInitialForm = () => ({
 </script>
 
 <script setup>
-import { useAttrs, ref } from 'vue';
-import { getCategories } from '@/services/category';
+import { ref } from 'vue';
 import PostForm from '@/components/apps/post/PostForm.vue';
+import { useAsyncState } from '@vueuse/core';
+import { createPost } from '@/services';
+import { useAuthStore } from 'src/stores/auth';
+import { useRouter } from 'vue-router';
 
-const categories = getCategories();
-
+const authStore = useAuthStore();
 const form = ref(getInitialForm());
-
+const router = useRouter();
 const onHide = () => {
   form.value = getInitialForm();
 };
 
-const removeTag = () => {};
+const { isLoading, execute } = useAsyncState(createPost, null, {
+  immediate: false,
+  throwError: true,
+  onSuccess: postId => {
+    console.log('postId: ', postId);
+    router.push(`/posts/${postId}`);
+  },
+});
 </script>
 
 <style lang="scss" scoped></style>
