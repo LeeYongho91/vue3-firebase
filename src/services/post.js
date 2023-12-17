@@ -1,5 +1,5 @@
 import { db } from 'boot/firebase';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where } from 'firebase/firestore';
 
 export async function createPost(data) {
   const baseCollection = collection(db, 'posts');
@@ -12,4 +12,35 @@ export async function createPost(data) {
     createdAt: serverTimestamp()
   });
   return docRef.id; 
+}
+
+export async function getPosts(params) {
+  console.log(params);
+  // const querySnapshot = await getDocs(collection(db, "posts"));
+  // const posts = querySnapshot.docs.map(docs => {
+  //   const data = docs.data();
+  //   return {
+  //     ...data,
+  //     id:docs.id,
+  //     createdAt: data.createdAt?.toDate(),
+  //   };
+  // });
+  // console.log(posts);
+  // return posts;
+
+  const conditions = [];
+  if(params?.category) {
+    conditions.push(where('category', '==', params?.category))
+  }
+  const q = query(collection(db, 'posts'), ...conditions);
+  const querySnapshot = await getDocs(q);
+  const posts = querySnapshot.docs.map(docs => {
+    const data = docs.data();
+    return {
+      ...data,
+      id: docs.id,
+      createdAt: data.createdAt?.toDate(),
+    };
+  });
+  return posts;
 }

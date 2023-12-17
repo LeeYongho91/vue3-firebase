@@ -23,13 +23,20 @@
       </q-select>
       <TiptapEditor v-model="contentModel" />
       <q-input
-        v-model="tagField"
         outlined
         placeholder="태그를 입력해주세요 (입력 후 Enter)"
         prefix="#"
+        @keypress.enter.prevent="onRegistTag"
       ></q-input>
-      <q-chip outline dense removable @remove="removeTag" color="teal"
-        >vuejs</q-chip
+      <q-chip
+        v-for="(tag, idx) in tags"
+        :key="tag"
+        outline
+        dense
+        removable
+        @remove="removeTag(idx)"
+        color="teal"
+        >{{ tag }}</q-chip
       >
     </q-card-section>
 
@@ -98,9 +105,11 @@ const contentModel = computed({
   set: val => emit('update:content', val),
 });
 
-const tagField = ref('');
-
-const removeTag = () => {};
+const removeTag = idx => {
+  const model = [...props.tags];
+  model.splice(idx, 1);
+  emit('update:tags', model);
+};
 
 const categories = getCategories();
 
@@ -111,6 +120,24 @@ const handleSubmit = () => {
   }
 
   emit('submit');
+};
+
+const onRegistTag = e => {
+  console.log(e);
+  const tagValue = e.target.value.replace(/ /g, '');
+  if (!tagValue) {
+    return;
+  }
+  if (props.tags.length >= 10) {
+    $q.notify('태그는 10개 이상 등록할 수 없습니다.');
+    return;
+  }
+
+  if (props.tags.includes(tagValue) === false) {
+    emit('update:tags', [...props.tags, tagValue]);
+  }
+
+  e.target.value = '';
 };
 </script>
 

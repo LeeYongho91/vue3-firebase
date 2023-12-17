@@ -2,10 +2,22 @@
   <StickySideBar>
     <q-card flat bordered>
       <q-list bordered separator>
-        <q-item clickable v-ripple :active="true">
+        <q-item
+          clickable
+          v-ripple
+          :active="category === null"
+          @click="changeCategory(null)"
+        >
           <q-item-section>전체</q-item-section>
         </q-item>
-        <q-item v-for="cate in categories" :key="cate.value" clickable v-ripple>
+        <q-item
+          v-for="cate in categories"
+          :key="cate.value"
+          clickable
+          v-ripple
+          :active="category === cate.value"
+          @click="changeCategory(cate.value)"
+        >
           <q-item-section>{{ cate.label }}</q-item-section>
         </q-item>
       </q-list>
@@ -17,6 +29,18 @@
 import StickySideBar from '@/components/StickySideBar.vue';
 import { getCategories } from '@/services/category';
 
+defineProps({
+  category: {
+    type: String,
+    default: '',
+  },
+});
+
+const emit = defineEmits(['update:category']);
+
+const changeCategory = value => {
+  emit('update:category', value);
+};
+
 const categories = getCategories();
-console.log(categories);
 </script>
