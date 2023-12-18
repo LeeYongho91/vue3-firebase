@@ -15,7 +15,7 @@ export async function createPost(data) {
 }
 
 export async function getPosts(params) {
-  console.log(params);
+ 
   // const querySnapshot = await getDocs(collection(db, "posts"));
   // const posts = querySnapshot.docs.map(docs => {
   //   const data = docs.data();
