@@ -105,12 +105,6 @@ const contentModel = computed({
   set: val => emit('update:content', val),
 });
 
-const removeTag = idx => {
-  const model = [...props.tags];
-  model.splice(idx, 1);
-  emit('update:tags', model);
-};
-
 const categories = getCategories();
 
 const handleSubmit = () => {
@@ -122,23 +116,38 @@ const handleSubmit = () => {
   emit('submit');
 };
 
-const onRegistTag = e => {
-  console.log(e);
-  const tagValue = e.target.value.replace(/ /g, '');
-  if (!tagValue) {
-    return;
-  }
-  if (props.tags.length >= 10) {
-    $q.notify('태그는 10개 이상 등록할 수 없습니다.');
-    return;
-  }
+const useTag = () => {
+  const onRegistTag = e => {
+    console.log(e);
+    const tagValue = e.target.value.replace(/ /g, '');
+    if (!tagValue) {
+      return;
+    }
+    if (props.tags.length >= 10) {
+      $q.notify('태그는 10개 이상 등록할 수 없습니다.');
+      return;
+    }
 
-  if (props.tags.includes(tagValue) === false) {
-    emit('update:tags', [...props.tags, tagValue]);
-  }
+    if (props.tags.includes(tagValue) === false) {
+      emit('update:tags', [...props.tags, tagValue]);
+    }
 
-  e.target.value = '';
+    e.target.value = '';
+  };
+
+  const removeTag = idx => {
+    const model = [...props.tags];
+    model.splice(idx, 1);
+    emit('update:tags', model);
+  };
+
+  return {
+    onRegistTag,
+    removeTag,
+  };
 };
+
+const { onRegistTag, removeTag } = useTag();
 </script>
 
 <style lang="scss" scoped></style>
