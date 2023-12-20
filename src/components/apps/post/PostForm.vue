@@ -147,6 +147,8 @@ const useTag = () => {
   };
 };
 
+console.log(`test`);
+
 const { onRegistTag, removeTag } = useTag();
 </script>
 
