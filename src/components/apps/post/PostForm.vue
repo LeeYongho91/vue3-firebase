@@ -26,7 +26,7 @@
         outlined
         placeholder="태그를 입력해주세요 (입력 후 Enter)"
         prefix="#"
-        @keypress.enter.prevent="onRegistTag"
+        @keypress.enter.prevent="addTag"
       ></q-input>
       <q-chip
         v-for="(tag, idx) in tags"
@@ -56,11 +56,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, toRef } from 'vue';
 import { useQuasar } from 'quasar';
 import { getCategories } from '@/services/category';
 import TiptapEditor from '@/components/tiptap/TiptapEditor.vue';
 import { validateRequired } from '@/utils/validate-rules';
+import { useTag } from '@/composables/useTag';
 
 const props = defineProps({
   title: {
@@ -105,6 +106,12 @@ const contentModel = computed({
   set: val => emit('update:content', val),
 });
 
+const { addTag, removeTag } = useTag({
+  tags: toRef(props, 'tags'),
+  updateTags: tags => emit('update:tags', tags),
+  maxLengthMessage: '태그를 10개 이상 등록할 수 없습니다.',
+});
+
 const categories = getCategories();
 
 const handleSubmit = () => {
@@ -115,41 +122,6 @@ const handleSubmit = () => {
 
   emit('submit');
 };
-
-const useTag = () => {
-  const onRegistTag = e => {
-    console.log(e);
-    const tagValue = e.target.value.replace(/ /g, '');
-    if (!tagValue) {
-      return;
-    }
-    if (props.tags.length >= 10) {
-      $q.notify('태그는 10개 이상 등록할 수 없습니다.');
-      return;
-    }
-
-    if (props.tags.includes(tagValue) === false) {
-      emit('update:tags', [...props.tags, tagValue]);
-    }
-
-    e.target.value = '';
-  };
-
-  const removeTag = idx => {
-    const model = [...props.tags];
-    model.splice(idx, 1);
-    emit('update:tags', model);
-  };
-
-  return {
-    onRegistTag,
-    removeTag,
-  };
-};
-
-console.log(`test`);
-
-const { onRegistTag, removeTag } = useTag();
 </script>
 
 <style lang="scss" scoped></style>

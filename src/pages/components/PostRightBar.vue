@@ -29,13 +29,16 @@
           />
           <div class="q-gutter-sm q-pb-sm">
             <q-btn
+              v-for="(tag, index) in tags"
+              :key="tag"
               size="10px"
               padding="2px 4px 2px 7px"
               color="grey-3"
               text-color="dark"
               unelevated
+              @click="removeTag(index)"
             >
-              vuejs
+              {{ tag }}
               <q-icon name="clear" size="12px" color="grey" />
             </q-btn>
             <q-btn
@@ -66,18 +69,24 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, toRef } from 'vue';
 import StickySideBar from '@/components/StickySideBar.vue';
+import { useTag } from '@/composables/useTag';
 
-defineEmits(['openWriteDialog']);
+const props = defineProps({
+  tags: {
+    type: Array,
+    default: () => [],
+  },
+});
 
-const tags = ref([
-  { name: 'vuejs', count: 10 },
-  { name: 'react', count: 8 },
-  { name: 'angular', count: 7 },
-  { name: 'html', count: 1 },
-  { name: 'css', count: 3 },
-]);
+const emit = defineEmits(['openWriteDialog', 'update:tags']);
+
+const { addTag, removeTag } = useTag({
+  tags: toRef(props, 'tags'),
+  updateTags: tags => emit('update:tags', tags),
+  maxLengthMessage: '태그를 10개 이상 등록할 수 없습니다.',
+});
 </script>
 
 <style lang="scss" scoped></style>
