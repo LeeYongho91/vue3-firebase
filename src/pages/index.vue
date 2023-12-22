@@ -6,7 +6,11 @@
         <PostHeader />
         <PostList :items="posts" />
       </section>
-      <PostRightBar class="col-3" @open-write-dialog="openWriteDialog" />
+      <PostRightBar
+        class="col-3"
+        v-model:tags="params.tags"
+        @open-write-dialog="openWriteDialog"
+      />
     </div>
     <PostWriteDialog v-model="postDialog" />
   </q-page>
@@ -27,6 +31,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 const params = ref({
   category: null,
+  tags: [],
 });
 
 const { state: posts, execute } = useAsyncState(getPosts, [], {

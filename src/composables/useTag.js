@@ -10,7 +10,6 @@ export const useTag = options => {
     if (!tagValue) {
       return;
     }
-    console.log(tags);
     if (tags.value.length >= 10) {
       $q.notify(maxLengthMessage);
       return;
@@ -28,7 +27,7 @@ export const useTag = options => {
   const removeTag = idx => {
     const model = [...tags.value];
     model.splice(idx, 1);
-    emit('update:tags', model); 
+    updateTags(model)
   };
 
   return {

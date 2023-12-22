@@ -26,6 +26,7 @@
             dense
             input-style="font-size: 12px;"
             placeholder="태그로 검색해보세요"
+            @keypress.enter.prevent="addTag"
           />
           <div class="q-gutter-sm q-pb-sm">
             <q-btn
@@ -41,26 +42,16 @@
               {{ tag }}
               <q-icon name="clear" size="12px" color="grey" />
             </q-btn>
-            <q-btn
-              size="10px"
-              padding="2px 4px 2px 7px"
-              color="grey-3"
-              text-color="dark"
-              unelevated
-            >
-              react
-              <q-icon name="clear" size="12px" color="grey" />
-            </q-btn>
           </div>
         </q-card>
       </q-card-section>
       <q-list padding>
-        <q-item v-for="tag in tags" :key="tag.name" clickable dense>
+        <q-item clickable dense @click="addTag('vuejs')">
           <q-item-section class="text-teal text-caption">
-            #{{ tag.name }}</q-item-section
-          >
+            #vue.js
+          </q-item-section>
           <q-item-section side class="text-teal text-caption">{{
-            tag.count
+            10
           }}</q-item-section>
         </q-item>
       </q-list>
