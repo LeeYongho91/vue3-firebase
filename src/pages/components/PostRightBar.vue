@@ -78,6 +78,8 @@ const { addTag, removeTag } = useTag({
   updateTags: tags => emit('update:tags', tags),
   maxLengthMessage: '태그를 10개 이상 등록할 수 없습니다.',
 });
+
+console.log(`test`);
 </script>
 
 <style lang="scss" scoped></style>
