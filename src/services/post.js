@@ -1,5 +1,5 @@
 import { db } from 'boot/firebase';
-import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where } from 'firebase/firestore';
+import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc } from 'firebase/firestore';
 
 export async function createPost(data) {
   const baseCollection = collection(db, 'posts');
@@ -35,6 +35,9 @@ export async function getPosts(params) {
   if(params?.tags && params?.tags.length > 0) {
     conditions.push(where('tags', 'array-contains-any', params?.tags))
   }
+  if(params?.sort) {
+    conditions.push(orderBy(params.sort, 'desc'))
+  }
 
   const q = query(collection(db, 'posts'), ...conditions);
   const querySnapshot = await getDocs(q);
@@ -47,4 +50,18 @@ export async function getPosts(params) {
     };
   });
   return posts;
+}
+
+export async function getPost(id) {
+  const docSnap = await getDoc(doc(db, 'posts', id));
+  if(!docSnap.exists()) {
+    throw new Error('No such document;');
+  }
+
+  const data = docSnap.data();
+
+  return {
+    ...data,
+    createdAt: data.createdAt?.toDate()
+  }
 }
