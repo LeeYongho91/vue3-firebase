@@ -98,6 +98,8 @@ const { state: post, error } = useAsyncState(
   () => getPost(route.params.id),
   {},
 );
+
+console.log(`test`);
 </script>
 
 <style lang="scss" scoped></style>
