@@ -11,11 +11,17 @@
         v-model:category="form.category"
         v-model:content="form.content"
         v-model:tags="form.tags"
-        @submit.prevent
+        @submit="handleSubmit"
       >
         <template #actions>
           <q-btn flat label="취소" v-close-popup />
-          <q-btn flat label="저장" color="primary" v-close-popup />
+          <q-btn
+            type="submit"
+            flat
+            label="수정"
+            color="primary"
+            :isLoading="isLoading"
+          />
         </template>
       </PostForm>
     </BaseCard>
@@ -33,15 +39,49 @@ const getInitialForm = () => ({
 
 <script setup>
 import { useAttrs, ref } from 'vue';
-
 import BaseCard from '@/components/base/BaseCard.vue';
 import PostForm from '@/components/apps/post/PostForm.vue';
 
+import { updatePost, getPost } from '@/services';
+import { useAsyncState } from '@vueuse/core';
+import { useRoute } from 'vue-router';
+import { useQuasar } from 'quasar';
+
+const route = useRoute();
+const $q = useQuasar();
+
+useAsyncState(
+  () => getPost(route.params.id),
+  {},
+  {
+    onSuccess: post => {
+      form.value.title = post.title;
+      form.value.category = post.category;
+      form.value.content = post.content;
+      form.value.tags = post.tags;
+    },
+  },
+);
+
 const form = ref(getInitialForm());
 
-const onHide = () => {
-  form.value = getInitialForm();
-  tagField.value = '';
+const { isLoading, execute: executeUpdatePost } = useAsyncState(
+  updatePost,
+  null,
+  {
+    immediate: false,
+    throwError: true,
+    onSuccess: () => {
+      $q.notify('수정완료!');
+    },
+  },
+);
+
+const handleSubmit = async () => {
+  if (confirm('수정 하시겠어요?') === false) {
+    return;
+  }
+  await executeUpdatePost(1000, route.params.id, form.value);
 };
 </script>
 

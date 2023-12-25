@@ -1,5 +1,5 @@
 import { db } from 'boot/firebase';
-import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc } from 'firebase/firestore';
+import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc, updateDoc } from 'firebase/firestore';
 
 export async function createPost(data) {
   const baseCollection = collection(db, 'posts');
@@ -64,4 +64,11 @@ export async function getPost(id) {
     ...data,
     createdAt: data.createdAt?.toDate()
   }
+}
+
+export async function updatePost(id, data) {
+  await updateDoc(doc(db, 'posts', id), {
+    ...data,
+    updatedAt: serverTimestamp(),
+  })
 }
