@@ -1,5 +1,5 @@
 import { db } from 'boot/firebase';
-import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 
 export async function createPost(data) {
   const baseCollection = collection(db, 'posts');
@@ -71,4 +71,8 @@ export async function updatePost(id, data) {
     ...data,
     updatedAt: serverTimestamp(),
   })
+}
+
+export async function deletePost(id) {
+  await deleteDoc(doc(db, 'posts', id));
 }
