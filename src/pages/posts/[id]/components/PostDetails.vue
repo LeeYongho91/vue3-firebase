@@ -109,7 +109,13 @@ const { execute: executeDeletePost } = useAsyncState(deletePost, null, {
   },
 });
 
-const handleDeletePost = () => {};
+const handleDeletePost = async () => {
+  if (confirm('삭제 하시겠어요?') === false) {
+    return;
+  }
+
+  await executeDeletePost(0, route.params.id);
+};
 </script>
 
 <style lang="scss" scoped></style>

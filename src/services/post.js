@@ -1,5 +1,5 @@
 import { db } from 'boot/firebase';
-import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc, startAt, startAfter, limit, endBefore } from 'firebase/firestore';
 
 export async function createPost(data) {
   const baseCollection = collection(db, 'posts');
@@ -38,6 +38,12 @@ export async function getPosts(params) {
   if(params?.sort) {
     conditions.push(orderBy(params.sort, 'desc'))
   }
+  if(params?.start) {
+    conditions.push(startAfter(params.start));
+  }
+  if(params?.limit) {
+    conditions.push(limit(params.limit));
+  }
 
   const q = query(collection(db, 'posts'), ...conditions);
   const querySnapshot = await getDocs(q);
@@ -49,6 +55,9 @@ export async function getPosts(params) {
       createdAt: data.createdAt?.toDate(),
     };
   });
+
+  const latestDoc = querySnapshot.docs[querySnapshot.docs.length -1];
+
   return posts;
 }
 

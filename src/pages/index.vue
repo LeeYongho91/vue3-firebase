@@ -5,6 +5,12 @@
       <section class="col-7">
         <PostHeader v-model:sort="params.sort" />
         <PostList :items="posts" />
+        <q-btn
+          label="더보기"
+          class="full-width q-mt-md"
+          outline
+          @click="loadMore"
+        />
       </section>
       <PostRightBar
         class="col-3"
@@ -57,6 +63,10 @@ const openWriteDialog = () => {
 const completeRegisterationPost = () => {
   postDialog.value = false;
   execute(0, params.value);
+};
+
+const loadMore = () => {
+  console.log(`test`);
 };
 </script>
 
