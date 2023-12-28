@@ -58,7 +58,10 @@ export async function getPosts(params) {
 
   const latestDoc = querySnapshot.docs[querySnapshot.docs.length -1];
 
-  return posts;
+  return {
+    items: posts,
+    lastItem: latestDoc
+  };
 }
 
 export async function getPost(id) {
