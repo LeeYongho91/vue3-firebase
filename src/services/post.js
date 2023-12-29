@@ -1,5 +1,5 @@
 import { db } from 'boot/firebase';
-import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc, startAt, startAfter, limit, endBefore } from 'firebase/firestore';
+import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc, startAt, startAfter, limit, endBefore, setDoc } from 'firebase/firestore';
 
 export async function createPost(data) {
   const baseCollection = collection(db, 'posts');
@@ -87,4 +87,29 @@ export async function updatePost(id, data) {
 
 export async function deletePost(id) {
   await deleteDoc(doc(db, 'posts', id));
+}
+
+
+/**
+ * 1. 게시글 좋아요
+ * 2. 개시글 좋아요 취소
+ * 3. 게시글 좋아요 조회
+ */
+
+export async function addLike(uid, postId) {
+  await setDoc(doc(db, 'post_likes', `${uid}_${postId}`), {
+    uid,
+    postId,
+    createdAt: serverTimestamp()
+  })
+}
+
+export async function removeLike(uid, postId) {
+  await deleteDoc(doc(db, 'post_likes', `${uid}_${postId}`));
+}
+
+
+export async function hasLike(uid, postId) {
+  const docSnap = await getDoc(doc(db, 'post_likes', `${uid}_${postId}`))
+  return docSnap.exists();
 }

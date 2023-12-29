@@ -17,7 +17,7 @@
         {{ message }}
       </div>
     </q-item-section>
-    <q-item-section side top>
+    <q-item-section v-if="hasOwnContent(uid)" side top>
       <q-btn
         flat
         color="grey"
@@ -32,6 +32,9 @@
 
 <script setup>
 import { date } from 'quasar';
+import { useAuthStore } from '@/stores/auth';
+
+const { hasOwnContent } = useAuthStore();
 
 defineProps({
   id: {

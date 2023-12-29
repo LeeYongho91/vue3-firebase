@@ -37,3 +37,8 @@ import BaseCard from '@/components/base/BaseCard.vue';
 </script>
 
 <style lang="scss" scoped></style>
+
+<route lang="yaml">
+meta:
+  requiresAuth: true
+</route>

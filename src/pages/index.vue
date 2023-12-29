@@ -16,7 +16,7 @@
       </section>
       <PostRightBar
         class="col-3"
-        v-model:tags="params.tags"
+        v-model:tags="tags"
         @open-write-dialog="openWriteDialog"
       />
     </div>
@@ -42,13 +42,14 @@ import { useRouter } from 'vue-router';
 import { vIntersectionObserver } from '@vueuse/components';
 
 import { usePostQuery } from '@/composables/usePostQuery';
+import { useAuthStore } from 'src/stores/auth';
 
-const router = useRouter();
-const { category, sort } = usePostQuery();
+const { category, sort, tags } = usePostQuery();
+const authStore = useAuthStore();
 
 const params = computed(() => ({
   category: category.value,
-  tags: [],
+  tags: tags.value,
   sort: sort.value,
   limit: 4,
 }));
@@ -84,7 +85,12 @@ watch(
 );
 
 const postDialog = ref(false);
+
 const openWriteDialog = () => {
+  if (!authStore.isAuthenticated) {
+    alert('로그인 후 이용 가능합니다');
+    return;
+  }
   postDialog.value = true;
 };
 
