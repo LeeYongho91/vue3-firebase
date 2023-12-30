@@ -46,7 +46,7 @@
             <q-btn class="full-width" flat dense @click.prevent="toggleLike">
               <PostIcon
                 :name="isLike ? 'favorite' : 'sym_o_favorite'"
-                :label="likeCount"
+                :label="item.likeCount"
                 tooltip="좋아요"
               />
             </q-btn>
@@ -72,10 +72,11 @@
 import { date } from 'quasar';
 import PostIcon from '@/components/apps/post/PostIcon.vue';
 import { formatRelativeTime } from '@/utils/relative-time-format';
-import { addLike, removeLike } from '@/services';
+import { addLike, removeLike, hasLike } from '@/services';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from 'src/stores/auth';
 import { ref, toRef } from 'vue';
+import { toRefs } from '@vueuse/core';
 
 const props = defineProps({
   item: {
@@ -84,13 +85,24 @@ const props = defineProps({
   },
 });
 
-const { uid } = storeToRefs(useAuthStore());
-const { id: postId, likeCount: initialCount } = toRef(props.item, 'id');
+const { uid, isAuthenticated } = storeToRefs(useAuthStore());
+const { id: postId, likeCount: initalCount } = toRefs(props.item);
 
 const isLike = ref(false);
-const likeCount = ref(initialCount.value);
+const likeCount = ref(initalCount.value);
+
+const initLike = async () => {
+  if (isAuthenticated.value === false) {
+    return;
+  }
+  isLike.value = await hasLike(uid.value, postId.value);
+};
 
 const toggleLike = async () => {
+  if (isAuthenticated.value === false) {
+    alert('로그인 후 이용 가능합니다.');
+    return;
+  }
   if (isLike.value) {
     await removeLike(uid.value, postId.value);
     likeCount.value--;
@@ -100,6 +112,8 @@ const toggleLike = async () => {
   }
   isLike.value = !isLike.value;
 };
+
+initLike();
 </script>
 
 <style lang="scss" scoped></style>
