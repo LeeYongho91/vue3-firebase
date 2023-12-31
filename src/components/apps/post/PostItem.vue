@@ -69,14 +69,9 @@
 </template>
 
 <script setup>
-import { date } from 'quasar';
 import PostIcon from '@/components/apps/post/PostIcon.vue';
 import { formatRelativeTime } from '@/utils/relative-time-format';
-import { addLike, removeLike, hasLike } from '@/services';
-import { storeToRefs } from 'pinia';
-import { useAuthStore } from 'src/stores/auth';
-import { ref, toRef } from 'vue';
-import { toRefs } from '@vueuse/core';
+import { useLike } from '@/composables/useLike';
 
 const props = defineProps({
   item: {
@@ -84,36 +79,9 @@ const props = defineProps({
     default: () => ({}),
   },
 });
-
-const { uid, isAuthenticated } = storeToRefs(useAuthStore());
-const { id: postId, likeCount: initalCount } = toRefs(props.item);
-
-const isLike = ref(false);
-const likeCount = ref(initalCount.value);
-
-const initLike = async () => {
-  if (isAuthenticated.value === false) {
-    return;
-  }
-  isLike.value = await hasLike(uid.value, postId.value);
-};
-
-const toggleLike = async () => {
-  if (isAuthenticated.value === false) {
-    alert('로그인 후 이용 가능합니다.');
-    return;
-  }
-  if (isLike.value) {
-    await removeLike(uid.value, postId.value);
-    likeCount.value--;
-  } else {
-    await addLike(uid.value, postId.value);
-    likeCount.value++;
-  }
-  isLike.value = !isLike.value;
-};
-
-initLike();
+const { isLike, likeCount, toggleLike } = useLike(props.item.id, {
+  initialCount: props.item.likeCount,
+});
 </script>
 
 <style lang="scss" scoped></style>
