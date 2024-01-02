@@ -54,9 +54,14 @@
         </div>
         <div class="col-3">
           <div class="flex flex-center">
-            <q-btn class="full-width" flat dense>
+            <q-btn
+              class="full-width"
+              flat
+              dense
+              @click.prevent="toggleBookmark"
+            >
               <PostIcon
-                name="sym_o_bookmark"
+                :name="isBookmark ? 'bookmark' : 'sym_o_bookmark'"
                 :label="item.bookmarkCount"
                 tooltip="북마크"
               />
@@ -72,6 +77,7 @@
 import PostIcon from '@/components/apps/post/PostIcon.vue';
 import { formatRelativeTime } from '@/utils/relative-time-format';
 import { useLike } from '@/composables/useLike';
+import { useBookmark } from '@/composables/useBookmark';
 
 const props = defineProps({
   item: {
@@ -82,6 +88,13 @@ const props = defineProps({
 const { isLike, likeCount, toggleLike } = useLike(props.item.id, {
   initialCount: props.item.likeCount,
 });
+
+const { isBookmark, bookmarkCount, toggleBookmark } = useBookmark(
+  props.item.id,
+  {
+    initialCount: props.item.bookmarkCount,
+  },
+);
 </script>
 
 <style lang="scss" scoped></style>
