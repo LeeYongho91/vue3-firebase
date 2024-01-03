@@ -84,7 +84,7 @@
 <script setup>
 import PostIcon from '@/components/apps/post/PostIcon.vue';
 import BaseCard from '@/components/base/BaseCard.vue';
-import { getPost, deletePost } from '@/services/post';
+import { deletePost, getPostDetails } from '@/services/post';
 import { useAsyncState } from '@vueuse/core';
 import { useRoute, useRouter } from 'vue-router';
 import { date, useQuasar } from 'quasar';
@@ -95,11 +95,11 @@ import { useLike } from '@/composables/useLike';
 const route = useRoute();
 const router = useRouter();
 const $q = useQuasar();
-const { state: post, error } = useAsyncState(
-  () => getPost(route.params.id),
+const { error } = useAsyncState(
+  () => getPostDetails(route.params.id),
   {},
   {
-    onSuccess: result => updateLikeCount(result.likeCount),
+    onSuccess: result => updateLikeCount(result.post.likeCount),
   },
 );
 

@@ -1,5 +1,5 @@
 import { db } from 'boot/firebase';
-import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc, startAt, startAfter, limit, endBefore, setDoc } from 'firebase/firestore';
+import { addDoc, collection, getDoc, serverTimestamp, getDocs, query, where, orderBy, doc, updateDoc, deleteDoc, startAt, startAfter, limit, endBefore, setDoc, increment } from 'firebase/firestore';
 
 export async function createPost(data) {
   const baseCollection = collection(db, 'posts');
@@ -78,6 +78,21 @@ export async function getPost(id) {
     createdAt: data.createdAt?.toDate()
   }
 }
+
+
+async function incrementReadCount(id) {
+  await updateDoc(doc(db, 'posts', id), {readCount: increment(1)})
+}
+
+export async function getPostDetails(id) {
+  await incrementReadCount(id);
+  const post = await getPost(id);
+  return {
+    post,
+  }
+}
+
+
 
 export async function updatePost(id, data) {
   await updateDoc(doc(db, 'posts', id), {
