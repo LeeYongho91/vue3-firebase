@@ -91,15 +91,21 @@ import { date, useQuasar } from 'quasar';
 import TiptapViewer from '@/components/tiptap/TiptapViewer.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { useLike } from '@/composables/useLike';
+import { ref } from 'vue';
 
 const route = useRoute();
 const router = useRouter();
 const $q = useQuasar();
+
+const post = ref({});
 const { error } = useAsyncState(
   () => getPostDetails(route.params.id),
   {},
   {
-    onSuccess: result => updateLikeCount(result.post.likeCount),
+    onSuccess: result => {
+      post.value = result.post;
+      updateLikeCount(result.post.likeCount);
+    },
   },
 );
 

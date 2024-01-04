@@ -11,7 +11,7 @@ import { useEditor, EditorContent } from '@tiptap/vue-3';
 import StarterKit from '@tiptap/starter-kit';
 import { watch } from 'vue';
 import Placeholder from '@tiptap/extension-placeholder';
-import TiptabEditorMenu from 'components/tiptap/TiptabEditorMenu.vue';
+import TiptabEditorMenu from '@/components/tiptap/TiptabEditorMenu.vue';
 import Link from '@tiptap/extension-link';
 import Image from '@tiptap/extension-image';
 
