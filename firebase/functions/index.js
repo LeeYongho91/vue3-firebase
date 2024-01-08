@@ -9,3 +9,5 @@ const {getFirestore} = require("firebase-admin/firestore");
 
 const app = initializeApp();
 const db = getFirestore(app);
+
+console.log(db);
